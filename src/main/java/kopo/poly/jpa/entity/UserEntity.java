@@ -6,6 +6,7 @@ import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -27,6 +28,34 @@ public class UserEntity {
 
     @Column(length = 500)
     private String userPassword;
+
+    @Column(length = 128)
+    private String userEmail;
+
+    @Column(length = 10)
+    private String userName;
+
+    @Column(length = 10)
+    private String userNickname;
+
+    @Column(length = 3)
+    private int userAge;
+
+    @Column(length = 100)
+    private String userAddress;
+
+    @Column(length = 4)
+    private String userGender;
+
+
+    @Column(length = 100)
+    private String userIntroduction;
+
+    @Column
+    private Date memberSince;
+
+    @Column(length = 30)
+    private String roomKey;
 
 
     // TODO: 2022/07/21 need to Add Columns
