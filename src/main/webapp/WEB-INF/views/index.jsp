@@ -7,6 +7,11 @@
     <title>index</title>
 </head>
 <body>
+<form action="/users/login" method="post" datatype="application/json">
+    <input type="text" name="userId">
+    <input type="password" name="userPassword">
+    <input type="submit">
+</form>
 
 </body>
 </html>

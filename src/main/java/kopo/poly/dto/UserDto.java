@@ -6,12 +6,18 @@ import kopo.poly.jpa.entity.FileInformationEntity;
 import kopo.poly.jpa.entity.FollowEntity;
 import kopo.poly.jpa.entity.TravelBoardEntity;
 import kopo.poly.jpa.entity.UserInterestEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserDto {
     private Integer userSeq; // 사용자 식별 번호
     private String userId; // 사용자 아이디

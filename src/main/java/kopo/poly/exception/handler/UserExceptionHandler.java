@@ -17,7 +17,7 @@ public class UserExceptionHandler {
     public String handleUserException(final UserException exception, Model model) {
         log.warn("UserException : " + exception.getErrorResult());
 
-        model.addAttribute("msg", exception.getErrorResult());
+        model.addAttribute("msg", exception.getErrorResult().getMessage());
         model.addAttribute("url", exception.getUrl());
 
         return REDIRECT_PAGE;

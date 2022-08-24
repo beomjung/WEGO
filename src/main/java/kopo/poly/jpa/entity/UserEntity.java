@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.NotNull;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -16,6 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @ToString(exclude={"file"})
+@DynamicInsert
+@DynamicUpdate
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -6,8 +6,12 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Repository
 @Transactional
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
+    Optional<UserEntity> findByUserId(final String userId);
+
+    Optional<UserEntity> findByUserNickname(final String userNickName);
 }
