@@ -2,10 +2,7 @@ package kopo.poly.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
-import kopo.poly.jpa.entity.FileInformationEntity;
-import kopo.poly.jpa.entity.FollowEntity;
-import kopo.poly.jpa.entity.TravelBoardEntity;
-import kopo.poly.jpa.entity.UserInterestEntity;
+import kopo.poly.jpa.entity.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,4 +34,5 @@ public class UserDto {
     private List<FollowEntity> followers;
     private List<UserInterestEntity> userInterests;
     private List<TravelBoardEntity> travelBoards;
+    private List<UserEventEntity> userEvents;
 }

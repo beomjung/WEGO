@@ -78,4 +78,7 @@ public class UserEntity {
     @OneToMany(mappedBy = "user")
     private List<TravelBoardEntity> travelBoards;
 
+    @OneToMany(mappedBy = "user")
+    private List<UserEventEntity> eventEntities;
+
 }
