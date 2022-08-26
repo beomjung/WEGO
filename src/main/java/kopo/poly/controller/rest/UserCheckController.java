@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import static kopo.poly.constant.UserConstants.USER_ID_HEADER;
 import static kopo.poly.constant.UserConstants.USER_NICK_NAME_HEADER;
 
+/**
+ * Ajax 로 요청 시 사용
+ */
 @RestController
 @Slf4j
 @RequiredArgsConstructor

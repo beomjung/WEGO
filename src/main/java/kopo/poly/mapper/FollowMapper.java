@@ -6,6 +6,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+/**
+ * DtoToEntity or EntityToDto
+ * Builder 사용해도 동작
+ */
+
 @Mapper
 public interface FollowMapper {
     FollowMapper INSTANCE = Mappers.getMapper(FollowMapper.class);

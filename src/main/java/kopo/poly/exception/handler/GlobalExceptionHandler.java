@@ -7,8 +7,12 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import static kopo.poly.constant.MainConstants.REDIRECT_PAGE;
+import static kopo.poly.constant.UrlConstants.REDIRECT_URL;
 
+/**
+ * Controller 실행 시 같이 실행, 특정 Exception 이 발생 시 호출
+ * -> Model 에 ErrorMsg, Url 값 저장 후 redirect page 로 이동 (redirectPage 와 같은 동작)
+ */
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -22,7 +26,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         model.addAttribute("url", exception.getUrl());
 
 
-        return REDIRECT_PAGE;
+        return REDIRECT_URL;
 
     }
 }

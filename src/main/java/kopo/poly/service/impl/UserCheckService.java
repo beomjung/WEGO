@@ -15,11 +15,13 @@ import java.util.Optional;
 public class UserCheckService implements IUserCheckService {
     private final UserRepository userRepository;
 
-
+    // 중복된 사용자 아이디가 있다면 true, or false
     public boolean isDuplicatedUserId(final String userId) {
         return userRepository.findByUserId(userId).isPresent() ? true : false;
     }
 
+
+    // 중복된 닉네임이 있다면 true, or false
     @Override
     public boolean isDuplicatedUserNickName(final String userNickName) throws Exception {
         return userRepository.findByUserNickname(userNickName).isPresent() ? true : false;

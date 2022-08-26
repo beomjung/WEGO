@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import static kopo.poly.constant.UrlConstants.MAIN_URL;
 
+/**
+ * Page 이동 Controller
+ */
 @Controller
 @Slf4j
 @RequiredArgsConstructor

@@ -19,6 +19,9 @@ import java.awt.*;
 import static kopo.poly.constant.UrlConstants.*;
 import static kopo.poly.constant.UserConstants.USER_SESSION_KEY;
 
+/**
+ * 사용자 정보 Controller
+ */
 @Controller
 @Slf4j
 @RequiredArgsConstructor
