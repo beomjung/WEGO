@@ -1,13 +1,14 @@
-package kopo.poly.dto.api;
+package kopo.poly.vo;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class LodgingDto {
+public class ApiLodgingDto {
     /**
-     * 숙박 정보 Dto
+     * 숙박 정보 조회 API 호출 시 result Value List
+     * + 소개 정보 조회 API Lodging 과 구별
      */
     private String contentid; // 콘텐츠 아이디
     private String contenttypeid; // 콘텐츠 타입 아이디
