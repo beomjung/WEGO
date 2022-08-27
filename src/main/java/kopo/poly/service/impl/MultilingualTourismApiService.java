@@ -1,7 +1,10 @@
 package kopo.poly.service.impl;
 
 import kopo.poly.dto.api.ApiLodgingDto;
+import kopo.poly.dto.api.introductions.*;
 import kopo.poly.enums.LanguageType;
+import kopo.poly.exception.ApiException;
+import kopo.poly.exception.result.ApiExceptionResult;
 import kopo.poly.service.ITourismApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +19,7 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 /**
@@ -33,6 +34,19 @@ public class MultilingualTourismApiService implements ITourismApiService {
     private final DocumentBuilder documentBuilder;
     private final Environment env;
 
+    private final Map<String, String> CONTENT_TYPE_ID_MAP = new HashMap<String, String>() {
+        {
+            put("TouristDestination", "76"); // 관광지
+            put("CulturalFacilities", "78"); // 문화 시설
+            put("Festival", "85"); // 축제
+            put("Leports", "75"); // 레포츠
+            put("Lodging", "80"); // 숙박
+            put("Shopping", "79"); // 쇼핑
+            put("Restaurants", "82"); // 음식점
+            put("Transportation", "77"); // only Multilingual 교통
+        }
+    };
+
     @Override
     public boolean supports(LanguageType languageType) {
         return languageType == LanguageType.ENG
@@ -42,34 +56,6 @@ public class MultilingualTourismApiService implements ITourismApiService {
                 || languageType == LanguageType.GER;
     }
 
-    @Override
-    @Cacheable(cacheNames = "MultilingualLodging")
-    public List<ApiLodgingDto> getLodgingList(
-            final LanguageType languageType, final String pageNo, final String areaCode, final String sigunguCode) throws Exception {
-        log.debug("findAreaCode in " + languageType);
-        final URI uri = URI.create(getUri(languageType, "searchStay")
-                + "&areaCode=" + areaCode
-                + "&sigunguCode=" + sigunguCode
-                + "&pageNo=" + pageNo);
-
-        log.info("uri : " + uri);
-
-        // XML 처리
-        Document doc = documentBuilder.parse(String.valueOf(uri));
-        NodeList items = doc.getElementsByTagName("item");
-
-        List<ApiLodgingDto> result = new LinkedList<>();
-
-        for (int i = 0; i < items.getLength(); i++) {
-            final Node item = items.item(i);
-            if (item.getNodeType() == Node.ELEMENT_NODE) {
-                Element element = (Element) item;
-                result.add(getLodgingDto(element));
-            }
-        }
-        return result;
-    }
-
 
     private URI getUri(LanguageType languageType, String serviceName) throws URISyntaxException {
         return new URI("https://api.visitkorea.or.kr/openapi/service/rest/"+ languageType.getLanguageType() +"/"
@@ -77,6 +63,16 @@ public class MultilingualTourismApiService implements ITourismApiService {
                 + "MobileOS=ETC" // 필수
                 + "&MobileApp=AppTest" // 필수
                 + "&serviceKey=" + env.getProperty("tourism.key"));
+    }
+
+
+
+    // URI 를 받아 NodeList (XML) 파일의 응답을 (NodeList) 로 반환
+    private NodeList getItemsFromURI(final URI uri) throws Exception {
+        Document doc = documentBuilder.parse(String.valueOf(uri));
+        NodeList items = doc.getElementsByTagName("item");
+
+        return items;
     }
 
 
@@ -96,8 +92,120 @@ public class MultilingualTourismApiService implements ITourismApiService {
         }
     }
 
+    @Override
+    @Cacheable(cacheNames = "MultilingualLodging")
+    public List<ApiLodgingDto> getLodgingList(
+            final LanguageType languageType, final String pageNo, final String areaCode, final String sigunguCode) throws Exception {
+        log.debug("findAreaCode in " + languageType);
+        final URI uri = URI.create(getUri(languageType, "searchStay")
+                + "&areaCode=" + areaCode
+                + "&sigunguCode=" + sigunguCode
+                + "&pageNo=" + pageNo);
+
+        log.info("uri : " + uri);
+
+        // XML 처리
+//        Document doc = documentBuilder.parse(String.valueOf(uri));
+//        NodeList items = doc.getElementsByTagName("item");
+        final NodeList items = getItemsFromURI(uri);
+
+        List<ApiLodgingDto> result = new LinkedList<>();
+
+        for (int i = 0; i < items.getLength(); i++) {
+            final Node item = items.item(i);
+            if (item.getNodeType() == Node.ELEMENT_NODE) {
+                Element element = (Element) item;
+                result.add(getLodgingDtoFromElement(element));
+            }
+        }
+        return result;
+    }
+
+
+    /**
+     * 소개 정보 조회 API
+     */
+
+
+    @Override
+    public List<FestivalInfoResult> getFestivalInfoList(LanguageType languageType, String contentId) throws Exception {
+        return null;
+    }
+
+    @Override
+    public List<CulturalFacilitiesResult> getCulturalFacilitiesList(LanguageType languageType, String contentId) throws Exception {
+        return null;
+    }
+
+    @Override
+    public List<LeportsResult> getLeportsList(LanguageType languageType, String contentId) throws Exception {
+        return null;
+    }
+
+    @Override
+    public List<LodgingResult> getLodgingList(LanguageType languageType, String contentId) throws Exception {
+        return null;
+    }
+
+    @Override
+    public List<RestaurantsResult> getRestaurantsList(LanguageType languageType, String contentId) throws Exception {
+        return null;
+    }
+
+    @Override
+    public List<ShoppingResult> getShoppingList(LanguageType languageType, String contentId) throws Exception {
+        return null;
+    }
+
+    @Override
+    public List<TouristDestinationResult> getTouristDestinationList(LanguageType languageType, String contentId) throws Exception {
+        return null;
+    }
+
+
+    // 교통 정보 조회
+    @Override
+    @Cacheable(cacheNames = "MultilingualTransportation")
+    public List<TransportationResult> getTransportationList(
+            final LanguageType languageType, final String contentId) throws Exception {
+        log.info("getTransportationList : " + languageType.getLanguageType());
+        final URI uri = URI.create(getUri(languageType, "detailIntro")
+        + "&contentTypeId=" + CONTENT_TYPE_ID_MAP.get("Transportation")
+        + "&contentId=" + contentId);
+
+        log.info("uri : " + uri);
+
+
+        final NodeList items = getItemsFromURI(uri);
+
+        List<TransportationResult> result = new LinkedList<>();
+
+        for (int i = 0; i < items.getLength(); i++) {
+            final Node item = items.item(i);
+            if (item.getNodeType() == Node.ELEMENT_NODE) {
+                Element element = (Element) item;
+                result.add(getTransportationResultFromElement(element));
+            }
+        }
+
+        // 검색된 결과가 없을 경우
+        if (result.size() == 0) {
+            throw new ApiException(ApiExceptionResult.RESULT_NOT_FOUND);
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Element 를 Dto 로 반환
+     * @param element
+     * @return
+     * @throws Exception
+     */
+
     // 숙박 정보 조회 Element 정보를 Dto 로 변환하는 Method
-    private ApiLodgingDto getLodgingDto(final Element element) throws Exception {
+    private ApiLodgingDto getLodgingDtoFromElement(final Element element) throws Exception {
         return ApiLodgingDto.builder()
                 .addr1(getTagValue("addr1", element))
                 .addr2(getTagValue("addr2", element))
@@ -123,5 +231,27 @@ public class MultilingualTourismApiService implements ITourismApiService {
                 .title(getTagValue("title", element))
                 .booktour(getTagValue("booktour", element))
                 .sigungucode(getTagValue("sigungucode", element)).build();
+    }
+
+    private TransportationResult getTransportationResultFromElement(final Element element) throws Exception {
+        return TransportationResult.builder()
+                .contenttypeid(getTagValue("contenttypeid", element))
+                .contentid(getTagValue("contentid", element))
+                .chkcreditcardtraffic(getTagValue("chkcreditcardtraffic", element))
+                .conven(getTagValue("conven", element))
+                .disablefacility(getTagValue("disablefacility", element))
+                .foreignerinfocenter(getTagValue("foreignerinfocenter", element))
+                .infocentertraffic(getTagValue("infocentertraffic", element))
+                .mainroute(getTagValue("mainroute", element))
+                .operationtimetraffic(getTagValue("operationtimetraffic", element))
+                .parkingtraffic(getTagValue("parkingtraffic", element))
+                .restroomtraffic(getTagValue("restroomtraffic", element))
+                .shipinfo(getTagValue("shipinfo", element)).build();
+
+    }
+    @Override
+    public List<TravelCourseResult> getTravelCourseList(LanguageType languageType, String contentId) throws Exception {
+        // 다국어 서비스는 여행 코스 서비스를 제공하지 않음
+        throw new ApiException(ApiExceptionResult.CANNOT_USE_THIS_SERVICE);
     }
 }

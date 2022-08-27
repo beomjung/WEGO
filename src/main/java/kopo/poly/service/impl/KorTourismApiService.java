@@ -1,7 +1,10 @@
 package kopo.poly.service.impl;
 
 import kopo.poly.dto.api.ApiLodgingDto;
+import kopo.poly.dto.api.introductions.*;
 import kopo.poly.enums.LanguageType;
+import kopo.poly.exception.ApiException;
+import kopo.poly.exception.result.ApiExceptionResult;
 import kopo.poly.service.ITourismApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +19,7 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -26,6 +27,19 @@ import java.util.Optional;
 public class KorTourismApiService implements ITourismApiService {
     private final DocumentBuilder documentBuilder;
     private final Environment env;
+
+    private final Map<String, String> CONTENT_TYPE_ID = new HashMap<String, String>() {
+        {
+            put("TouristDestination", "12"); // 관광지
+            put("CulturalFacilities", "14"); // 문화 시설
+            put("Festival", "15"); // 축제
+            put("TravelCourse", "25"); // only KOR 여행 코스
+            put("Leports", "28"); // 레포츠
+            put("Lodging", "32"); // 숙박
+            put("Shopping", "38"); // 쇼핑
+            put("Restaurants", "39"); // 음식점
+        }
+    };
 
     @Override
     public boolean supports(LanguageType languageType) {
@@ -55,9 +69,7 @@ public class KorTourismApiService implements ITourismApiService {
 
         log.info("uri : " + uri);
 
-        // XML 처리
-        Document doc = documentBuilder.parse(String.valueOf(uri));
-        NodeList items = doc.getElementsByTagName("item");
+        final NodeList items = getItemsFromURI(uri);
 
         List<ApiLodgingDto> result = new LinkedList<>();
 
@@ -69,6 +81,61 @@ public class KorTourismApiService implements ITourismApiService {
             }
         }
         return result;
+    }
+
+
+
+    /**
+     * 소개 정보 조회 API
+     */
+
+
+    @Override
+    public List<FestivalInfoResult> getFestivalInfoList(LanguageType languageType, String contentId) throws Exception {
+        return null;
+    }
+
+    @Override
+    public List<CulturalFacilitiesResult> getCulturalFacilitiesList(LanguageType languageType, String contentId) throws Exception {
+        return null;
+    }
+
+    @Override
+    public List<LeportsResult> getLeportsList(LanguageType languageType, String contentId) throws Exception {
+        return null;
+    }
+
+    @Override
+    public List<LodgingResult> getLodgingList(LanguageType languageType, String contentId) throws Exception {
+        return null;
+    }
+
+    @Override
+    public List<RestaurantsResult> getRestaurantsList(LanguageType languageType, String contentId) throws Exception {
+        return null;
+    }
+
+    @Override
+    public List<ShoppingResult> getShoppingList(LanguageType languageType, String contentId) throws Exception {
+        return null;
+    }
+
+    @Override
+    public List<TouristDestinationResult> getTouristDestinationList(LanguageType languageType, String contentId) throws Exception {
+        return null;
+    }
+
+    @Override
+    public List<TravelCourseResult> getTravelCourseList(LanguageType languageType, String contentId) throws Exception {
+        return null;
+    }
+
+
+    private NodeList getItemsFromURI(final URI uri) throws Exception {
+        Document doc = documentBuilder.parse(String.valueOf(uri));
+        NodeList items = doc.getElementsByTagName("item");
+
+        return items;
     }
 
 
@@ -124,5 +191,13 @@ public class KorTourismApiService implements ITourismApiService {
                 .title(getTagValue("title", element))
                 .booktour(getTagValue("booktour", element))
                 .sigungucode(getTagValue("sigungucode", element)).build();
+    }
+
+
+
+    @Override
+    public List<TransportationResult> getTransportationList(LanguageType languageType, String contentId) throws Exception {
+        // 국문 서비스는 교통 정보를 제공하지 않음
+        throw new ApiException(ApiExceptionResult.CANNOT_USE_THIS_SERVICE);
     }
 }
