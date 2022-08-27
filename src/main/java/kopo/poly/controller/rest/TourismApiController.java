@@ -2,6 +2,7 @@ package kopo.poly.controller.rest;
 
 import kopo.poly.dto.api.ApiLodgingDto;
 import kopo.poly.dto.api.introductions.TransportationResult;
+import kopo.poly.dto.api.introductions.TravelCourseResult;
 import kopo.poly.enums.LanguageType;
 import kopo.poly.factory.ApiServiceFactory;
 import kopo.poly.service.ITourismApiService;
@@ -52,5 +53,21 @@ public class TourismApiController {
         final ITourismApiService tourismApiService = serviceFactory.findTourismApiService(languageType);
 
         return ResponseEntity.ok().body(tourismApiService.getTransportationList(languageType, contentId));
+    }
+
+    /**
+     * 여행 코스 정보 조회
+     * @param languageType
+     * @param contentId
+     * @return
+     * @throws Exception (다국어 서비스로 요청 시 Exception)
+     */
+    @GetMapping("/introductions/travel-course/{contentId}")
+    public ResponseEntity<List<TravelCourseResult>> getTravelCourse (
+            @RequestHeader(LANGUAGE_TYPE_HEADER) final LanguageType languageType, @PathVariable final String contentId)
+            throws Exception {
+        final ITourismApiService tourismApiService = serviceFactory.findTourismApiService(languageType);
+
+        return ResponseEntity.ok().body(tourismApiService.getTravelCourseList(languageType, contentId));
     }
 }

@@ -28,7 +28,7 @@ public class KorTourismApiService implements ITourismApiService {
     private final DocumentBuilder documentBuilder;
     private final Environment env;
 
-    private final Map<String, String> CONTENT_TYPE_ID = new HashMap<String, String>() {
+    private final Map<String, String> CONTENT_TYPE_ID_MAP = new HashMap<String, String>() {
         {
             put("TouristDestination", "12"); // 관광지
             put("CulturalFacilities", "14"); // 문화 시설
@@ -49,9 +49,9 @@ public class KorTourismApiService implements ITourismApiService {
     /**
      * 숙박 정보 조회 (searchStay)
      *
-     * @param pageNo       PageNo
-     * @param areaCode     지역 코드
-     * @param sigunguCode  시군구 코드
+     * @param pageNo      PageNo
+     * @param areaCode    지역 코드
+     * @param sigunguCode 시군구 코드
      * @return List<LodgingDto> 언어에 맞는 숙박 정보 List
      * @throws Exception
      */
@@ -82,7 +82,6 @@ public class KorTourismApiService implements ITourismApiService {
         }
         return result;
     }
-
 
 
     /**
@@ -125,10 +124,41 @@ public class KorTourismApiService implements ITourismApiService {
         return null;
     }
 
+    // 여행 코스 조회
     @Override
     public List<TravelCourseResult> getTravelCourseList(LanguageType languageType, String contentId) throws Exception {
-        return null;
+        log.info("getTravelCourseList : " + languageType.getLanguageType());
+        final URI uri = URI.create(getUri(languageType, "detailIntro")
+                + "&contentTypeId=" + CONTENT_TYPE_ID_MAP.get("TravelCourse")
+                + "&contentId=" + contentId);
+
+        log.info("uri : " + uri);
+
+
+        final NodeList items = getItemsFromURI(uri);
+
+        List<TravelCourseResult> result = new LinkedList<>();
+
+        for (int i = 0; i < items.getLength(); i++) {
+            final Node item = items.item(i);
+            if (item.getNodeType() == Node.ELEMENT_NODE) {
+                Element element = (Element) item;
+                result.add(getTravelCourseResultFromElement(element));
+            }
+        }
+
+        // 검색된 결과가 없을 경우
+        if (result.size() == 0) {
+            throw new ApiException(ApiExceptionResult.RESULT_NOT_FOUND);
+        }
+
+        return result;
     }
+
+
+    /**
+     * XML 파일 처리
+     */
 
 
     private NodeList getItemsFromURI(final URI uri) throws Exception {
@@ -141,12 +171,13 @@ public class KorTourismApiService implements ITourismApiService {
 
     // LanguageType 및 Service 이름을 받아서 Uri return
     private URI getUri(LanguageType languageType, String serviceName) throws URISyntaxException {
-        return new URI("https://api.visitkorea.or.kr/openapi/service/rest/"+ languageType.getLanguageType() +"/"
+        return new URI("https://api.visitkorea.or.kr/openapi/service/rest/" + languageType.getLanguageType() + "/"
                 + serviceName + "?"
                 + "MobileOS=ETC" // 필수
                 + "&MobileApp=AppTest" // 필수
                 + "&serviceKey=" + env.getProperty("tourism.key"));
     }
+
 
     // XML 파일에서 꺼내온 (Element) 정보에서 Value 가져오기 / if ( Tag 가 없는 경우 or 값이 없는 경우 ) -> return ""
     private String getTagValue(String tag, Element eElement) throws Exception {
@@ -161,6 +192,26 @@ public class KorTourismApiService implements ITourismApiService {
             log.debug("exception : " + exception);
             return ""; // 해당 Tag 가 없는 경우 catch & return ""
         }
+    }
+
+
+    /**
+     * Element 를 Dto 로 반환
+     *
+     * @param element
+     * @return
+     * @throws Exception
+     */
+
+    private TravelCourseResult getTravelCourseResultFromElement(final Element element) throws Exception {
+        return TravelCourseResult.builder()
+                .contentid(getTagValue("contentid", element))
+                .contenttypeid(getTagValue("contentid", element))
+                .distance(getTagValue("distance", element)) // 코스 총거리
+                .infocentertourcourse(getTagValue("infocentertourcourse", element)) // 문의 및 안내
+                .schedule(getTagValue("schedule", element)) // 코스 일정
+                .taketime(getTagValue("taketime", element)) // 코스 총 소요시간
+                .theme(getTagValue("theme", element)).build(); // 코스 테마
     }
 
 
@@ -192,7 +243,6 @@ public class KorTourismApiService implements ITourismApiService {
                 .booktour(getTagValue("booktour", element))
                 .sigungucode(getTagValue("sigungucode", element)).build();
     }
-
 
 
     @Override

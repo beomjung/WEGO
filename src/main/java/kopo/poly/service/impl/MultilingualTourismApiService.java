@@ -56,42 +56,6 @@ public class MultilingualTourismApiService implements ITourismApiService {
                 || languageType == LanguageType.GER;
     }
 
-
-    private URI getUri(LanguageType languageType, String serviceName) throws URISyntaxException {
-        return new URI("https://api.visitkorea.or.kr/openapi/service/rest/"+ languageType.getLanguageType() +"/"
-                + serviceName + "?"
-                + "MobileOS=ETC" // 필수
-                + "&MobileApp=AppTest" // 필수
-                + "&serviceKey=" + env.getProperty("tourism.key"));
-    }
-
-
-
-    // URI 를 받아 NodeList (XML) 파일의 응답을 (NodeList) 로 반환
-    private NodeList getItemsFromURI(final URI uri) throws Exception {
-        Document doc = documentBuilder.parse(String.valueOf(uri));
-        NodeList items = doc.getElementsByTagName("item");
-
-        return items;
-    }
-
-
-
-    // 만약 해당 Tag 에 값이 없을 경우 exception 처리
-    private String getTagValue(String tag, Element eElement) throws Exception {
-        try {
-            Optional<NodeList> nlList = Optional.of(eElement.getElementsByTagName(tag).item(0).getChildNodes());
-            Node nValue = nlList.get().item(0);
-            if (nValue == null)
-                return "";
-            return nValue.getNodeValue();
-
-        } catch (Exception exception) {
-            log.debug("exception : " + exception);
-            return ""; // 해당 Tag 가 없는 경우 catch & return ""
-        }
-    }
-
     @Override
     @Cacheable(cacheNames = "MultilingualLodging")
     public List<ApiLodgingDto> getLodgingList(
@@ -194,6 +158,46 @@ public class MultilingualTourismApiService implements ITourismApiService {
         }
 
         return result;
+    }
+
+    /**
+     * XML 파일 처리
+     */
+
+
+    private URI getUri(LanguageType languageType, String serviceName) throws URISyntaxException {
+        return new URI("https://api.visitkorea.or.kr/openapi/service/rest/"+ languageType.getLanguageType() +"/"
+                + serviceName + "?"
+                + "MobileOS=ETC" // 필수
+                + "&MobileApp=AppTest" // 필수
+                + "&serviceKey=" + env.getProperty("tourism.key"));
+    }
+
+
+
+    // URI 를 받아 NodeList (XML) 파일의 응답을 (NodeList) 로 반환
+    private NodeList getItemsFromURI(final URI uri) throws Exception {
+        Document doc = documentBuilder.parse(String.valueOf(uri));
+        NodeList items = doc.getElementsByTagName("item");
+
+        return items;
+    }
+
+
+
+    // 만약 해당 Tag 에 값이 없을 경우 exception 처리
+    private String getTagValue(String tag, Element eElement) throws Exception {
+        try {
+            Optional<NodeList> nlList = Optional.of(eElement.getElementsByTagName(tag).item(0).getChildNodes());
+            Node nValue = nlList.get().item(0);
+            if (nValue == null)
+                return "";
+            return nValue.getNodeValue();
+
+        } catch (Exception exception) {
+            log.debug("exception : " + exception);
+            return ""; // 해당 Tag 가 없는 경우 catch & return ""
+        }
     }
 
 
