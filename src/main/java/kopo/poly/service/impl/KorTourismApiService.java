@@ -1,7 +1,6 @@
 package kopo.poly.service.impl;
 
-import kopo.poly.dto.api.LodgingDto;
-import kopo.poly.dto.api.introductions.IntroductionLodgingDto;
+import kopo.poly.dto.api.ApiLodgingDto;
 import kopo.poly.enums.LanguageType;
 import kopo.poly.service.ITourismApiService;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +44,7 @@ public class KorTourismApiService implements ITourismApiService {
     @Override
     // KOR1 이름으로 Lodging Cache 에 저장 요청 시 KOR1이 있다면 로직을 실행하지 않고 Cache 정보를 return
     @Cacheable(cacheNames = "KorLodging")
-    public List<LodgingDto> getLodgingList(
+    public List<ApiLodgingDto> getLodgingList(
             final LanguageType languageType, final String pageNo, final String areaCode, final String sigunguCode)
             throws Exception {
         log.debug("findAreaCode in " + LanguageType.KOR);
@@ -60,7 +59,7 @@ public class KorTourismApiService implements ITourismApiService {
         Document doc = documentBuilder.parse(String.valueOf(uri));
         NodeList items = doc.getElementsByTagName("item");
 
-        List<LodgingDto> result = new LinkedList<>();
+        List<ApiLodgingDto> result = new LinkedList<>();
 
         for (int i = 0; i < items.getLength(); i++) {
             final Node item = items.item(i);
@@ -99,8 +98,8 @@ public class KorTourismApiService implements ITourismApiService {
 
 
     // ElementToLodgingDto
-    private LodgingDto getLodgingDto(final Element element) throws Exception {
-        return LodgingDto.builder()
+    private ApiLodgingDto getLodgingDto(final Element element) throws Exception {
+        return ApiLodgingDto.builder()
                 .addr1(getTagValue("addr1", element))
                 .addr2(getTagValue("addr2", element))
                 .areacode(getTagValue("areacode", element))

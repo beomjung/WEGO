@@ -1,6 +1,6 @@
 package kopo.poly.controller.rest;
 
-import kopo.poly.dto.api.LodgingDto;
+import kopo.poly.dto.api.ApiLodgingDto;
 import kopo.poly.enums.LanguageType;
 import kopo.poly.factory.ApiServiceFactory;
 import kopo.poly.service.ITourismApiService;
@@ -24,7 +24,7 @@ public class TourismApiController {
     private final ApiServiceFactory serviceFactory;
 
     @GetMapping("/lodgings/{areaCode}/{sigunguCode}/{pageNo}")
-    public ResponseEntity<List<LodgingDto>> getLodgingInfo(
+    public ResponseEntity<List<ApiLodgingDto>> getLodgingInfo(
             @RequestHeader(LANGUAGE_TYPE_HEADER) final LanguageType languageType,
             @PathVariable final String areaCode, @PathVariable final String sigunguCode,
             @PathVariable final String pageNo) throws Exception {

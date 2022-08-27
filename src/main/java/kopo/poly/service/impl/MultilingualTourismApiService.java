@@ -1,6 +1,6 @@
 package kopo.poly.service.impl;
 
-import kopo.poly.dto.api.LodgingDto;
+import kopo.poly.dto.api.ApiLodgingDto;
 import kopo.poly.enums.LanguageType;
 import kopo.poly.service.ITourismApiService;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ public class MultilingualTourismApiService implements ITourismApiService {
 
     @Override
     @Cacheable(cacheNames = "MultilingualLodging")
-    public List<LodgingDto> getLodgingList(
+    public List<ApiLodgingDto> getLodgingList(
             final LanguageType languageType, final String pageNo, final String areaCode, final String sigunguCode) throws Exception {
         log.debug("findAreaCode in " + languageType);
         final URI uri = URI.create(getUri(languageType, "searchStay")
@@ -58,7 +58,7 @@ public class MultilingualTourismApiService implements ITourismApiService {
         Document doc = documentBuilder.parse(String.valueOf(uri));
         NodeList items = doc.getElementsByTagName("item");
 
-        List<LodgingDto> result = new LinkedList<>();
+        List<ApiLodgingDto> result = new LinkedList<>();
 
         for (int i = 0; i < items.getLength(); i++) {
             final Node item = items.item(i);
@@ -97,8 +97,8 @@ public class MultilingualTourismApiService implements ITourismApiService {
     }
 
     // 숙박 정보 조회 Element 정보를 Dto 로 변환하는 Method
-    private LodgingDto getLodgingDto(final Element element) throws Exception {
-        return LodgingDto.builder()
+    private ApiLodgingDto getLodgingDto(final Element element) throws Exception {
+        return ApiLodgingDto.builder()
                 .addr1(getTagValue("addr1", element))
                 .addr2(getTagValue("addr2", element))
                 .areacode(getTagValue("areacode", element))

@@ -20,14 +20,14 @@ public class ApiConstants {
      */
     private final static Map<String, String> KOR_CONTENT_TYPE_ID = new HashMap<String, String>() {
         {
-            put("관광지", "12");
-            put("문화시설", "14");
-            put("공연", "15");
-            put("여행코스", "25"); // only KOR
-            put("레포츠", "28");
-            put("숙박", "32");
-            put("쇼핑", "38");
-            put("음식점", "39");
+            put("TouristDestination", "12"); // 관광지
+            put("CulturalFacilities", "14"); // 문화 시설
+            put("Festival", "15"); // 축제
+            put("TravelCourse", "25"); // only KOR 여행 코스
+            put("Leports", "28"); // 레포츠
+            put("Lodging", "32"); // 숙박
+            put("Shopping", "38"); // 쇼핑
+            put("Restaurants", "39"); // 음식점
         }
     };
 
@@ -37,14 +37,14 @@ public class ApiConstants {
      */
     private final static Map<String, String> OTHER_CONTENT_TYPE_ID = new HashMap<String, String>() {
         {
-            put("관광지", "76");
-            put("문화시설", "78");
-            put("공연", "85");
-            put("레포츠", "75");
-            put("숙박", "80");
-            put("쇼핑", "79");
-            put("음식점", "82");
-            put("교통", "77"); // only Other
+            put("TouristDestination", "76"); // 관광지
+            put("CulturalFacilities", "78"); // 문화 시설
+            put("Festival", "85"); // 축제
+            put("Leports", "75"); // 레포츠
+            put("Lodging", "80"); // 숙박
+            put("Shopping", "79"); // 쇼핑
+            put("Restaurants", "82"); // 음식점
+            put("Transportation", "77"); // only Multilingual 교통
         }
     };
 }
