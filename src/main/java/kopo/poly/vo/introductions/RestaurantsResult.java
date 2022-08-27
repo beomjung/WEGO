@@ -1,4 +1,4 @@
-package kopo.poly.dto.api.introductions;
+package kopo.poly.vo.introductions;
 
 import lombok.Builder;
 import lombok.Data;
