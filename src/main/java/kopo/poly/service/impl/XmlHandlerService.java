@@ -1,5 +1,7 @@
 package kopo.poly.service.impl;
 
+import kopo.poly.enums.ApiServiceType;
+import kopo.poly.vo.ApiAreaBasedDto;
 import kopo.poly.vo.ApiLodgingDto;
 import kopo.poly.vo.introductions.*;
 import kopo.poly.enums.LanguageType;
@@ -33,9 +35,9 @@ public class XmlHandlerService {
      */
 
     // ServiceKey & Default Value  Setting
-    public URI getUri(LanguageType languageType, String serviceName) throws URISyntaxException {
+    public URI getUri(LanguageType languageType, ApiServiceType serviceName) throws URISyntaxException {
         return new URI("https://api.visitkorea.or.kr/openapi/service/rest/" + languageType.getLanguageType() + "/"
-                + serviceName + "?"
+                + serviceName.getServiceEndPoint() + "?"
                 + "MobileOS=ETC" // 필수
                 + "&MobileApp=AppTest" // 필수
                 + "&serviceKey=" + env.getProperty("tourism.key"));
@@ -300,6 +302,32 @@ public class XmlHandlerService {
                 .title(getTagValue("title", element))
                 .booktour(getTagValue("booktour", element))
                 .sigungucode(getTagValue("sigungucode", element)).build();
+    }
+
+    // AreaBasedDto 지역기반 정보 조회 실행 시 사용
+    public ApiAreaBasedDto getAreaBasedDtoFromElement(Element element) throws Exception {
+        return ApiAreaBasedDto.builder()
+                .addr1(getTagValue("addr1", element))
+                .addr2(getTagValue("addr2", element))
+                .areacode(getTagValue("areacode", element))
+                .cat1(getTagValue("cat1", element))
+                .cat2(getTagValue("cat1", element))
+                .cat3(getTagValue("cat1", element))
+                .areacode(getTagValue("areacode", element))
+                .contentid(getTagValue("contentid", element))
+                .contenttypeid(getTagValue("contenttypeid", element))
+                .createdtime(getTagValue("createdtime", element))
+                .firstimage(getTagValue("firstimage", element))
+                .firstimage2(getTagValue("firstimage2", element))
+                .mapx(getTagValue("mapx", element))
+                .mapy(getTagValue("mapy", element))
+                .mlevel(getTagValue("mlevel", element))
+                .modifiedtime(getTagValue("modifiedtime", element))
+                .readcount(getTagValue("readcount", element))
+                .tel(getTagValue("tel", element))
+                .title(getTagValue("title", element))
+                .sigungucode(getTagValue("sigungucode", element)).build();
+
     }
 
 

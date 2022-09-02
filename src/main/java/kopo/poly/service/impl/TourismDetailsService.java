@@ -1,5 +1,6 @@
 package kopo.poly.service.impl;
 
+import kopo.poly.enums.ApiServiceType;
 import kopo.poly.enums.ContentType;
 import kopo.poly.enums.LanguageType;
 import kopo.poly.exception.ApiException;
@@ -31,7 +32,7 @@ public class TourismDetailsService implements ITourismDetailsService {
     public TouristDestinationResult getTouristDestinationDetails(LanguageType languageType, String contentId) throws Exception {
         log.info("getTouristDestinationList : " + languageType.getLanguageType());
 
-        final URI uri = URI.create(xmlHandlerService.getUri(languageType, "detailIntro")
+        final URI uri = URI.create(xmlHandlerService.getUri(languageType, ApiServiceType.SEARCH_DETAIL)
                 + "&contentTypeId=" + getContentTypeId(languageType, ContentType.TOURIST_DESTINATION)
                 + "&contentId=" + contentId);
 
@@ -53,7 +54,7 @@ public class TourismDetailsService implements ITourismDetailsService {
     public FestivalInfoResult getFestivalDetails(LanguageType languageType, String contentId) throws Exception {
         log.info("getFestivalInfoList : " + languageType.getLanguageType());
 
-        final URI uri = URI.create(xmlHandlerService.getUri(languageType, "detailIntro")
+        final URI uri = URI.create(xmlHandlerService.getUri(languageType, ApiServiceType.SEARCH_DETAIL)
                 + "&contentTypeId=" + getContentTypeId(languageType, ContentType.FESTIVAL)
                 + "&contentId=" + contentId);
 
@@ -75,7 +76,7 @@ public class TourismDetailsService implements ITourismDetailsService {
     public CulturalFacilitiesResult getCulturalFacilitiesDetails(LanguageType languageType, String contentId) throws Exception {
         log.info("getLeportsList : " + languageType.getLanguageType());
 
-        final URI uri = URI.create(xmlHandlerService.getUri(languageType, "detailIntro")
+        final URI uri = URI.create(xmlHandlerService.getUri(languageType, ApiServiceType.SEARCH_DETAIL)
                 + "&contentTypeId=" + getContentTypeId(languageType, ContentType.CULTURAL_FACILITIES)
                 + "&contentId=" + contentId);
 
@@ -97,7 +98,7 @@ public class TourismDetailsService implements ITourismDetailsService {
     public LeportsResult getLeportsDetails(LanguageType languageType, String contentId) throws Exception {
         log.info("getLeportsList : " + languageType.getLanguageType());
 
-        final URI uri = URI.create(xmlHandlerService.getUri(languageType, "detailIntro")
+        final URI uri = URI.create(xmlHandlerService.getUri(languageType, ApiServiceType.SEARCH_DETAIL)
                 + "&contentTypeId=" + getContentTypeId(languageType, ContentType.LEPORTS)
                 + "&contentId=" + contentId);
 
@@ -119,7 +120,7 @@ public class TourismDetailsService implements ITourismDetailsService {
     public LodgingResult getLodgingDetails(LanguageType languageType, String contentId) throws Exception {
         log.info("getLodgingList : " + languageType.getLanguageType());
 
-        final URI uri = URI.create(xmlHandlerService.getUri(languageType, "detailIntro")
+        final URI uri = URI.create(xmlHandlerService.getUri(languageType, ApiServiceType.SEARCH_DETAIL)
                 + "&contentTypeId=" + getContentTypeId(languageType, ContentType.LODGING)
                 + "&contentId=" + contentId);
 
@@ -141,7 +142,7 @@ public class TourismDetailsService implements ITourismDetailsService {
     public RestaurantsResult getRestaurantDetails(LanguageType languageType, String contentId) throws Exception {
         log.info("getRestaurantsList : " + languageType.getLanguageType());
 
-        final URI uri = URI.create(xmlHandlerService.getUri(languageType, "detailIntro")
+        final URI uri = URI.create(xmlHandlerService.getUri(languageType, ApiServiceType.SEARCH_DETAIL)
                 + "&contentTypeId=" + getContentTypeId(languageType, ContentType.RESTAURANTS)
                 + "&contentId=" + contentId);
 
@@ -163,7 +164,7 @@ public class TourismDetailsService implements ITourismDetailsService {
     public ShoppingResult getShoppingDetails(LanguageType languageType, String contentId) throws Exception {
         log.info("getShoppingList : " + languageType.getLanguageType());
 
-        final URI uri = URI.create(xmlHandlerService.getUri(languageType, "detailIntro")
+        final URI uri = URI.create(xmlHandlerService.getUri(languageType, ApiServiceType.SEARCH_DETAIL)
                 + "&contentTypeId=" + getContentTypeId(languageType, ContentType.SHOPPING)
                 + "&contentId=" + contentId);
 
@@ -190,7 +191,7 @@ public class TourismDetailsService implements ITourismDetailsService {
         if (languageType != LanguageType.KOR) { // 국문 서비스만 제공
             throw new ApiException(ApiExceptionResult.CANNOT_USE_THIS_SERVICE);
         }
-        final URI uri = URI.create(xmlHandlerService.getUri(languageType, "detailIntro")
+        final URI uri = URI.create(xmlHandlerService.getUri(languageType, ApiServiceType.SEARCH_DETAIL)
                 + "&contentTypeId=" + getContentTypeId(languageType, ContentType.TRAVEL_COURSE)
                 + "&contentId=" + contentId);
 
@@ -218,7 +219,7 @@ public class TourismDetailsService implements ITourismDetailsService {
             throw new ApiException(ApiExceptionResult.CANNOT_USE_THIS_SERVICE);
         }
 
-        final URI uri = URI.create(xmlHandlerService.getUri(languageType, "detailIntro")
+        final URI uri = URI.create(xmlHandlerService.getUri(languageType, ApiServiceType.SEARCH_DETAIL)
                 + "&contentTypeId=" + getContentTypeId(languageType, ContentType.TRANSPORTATION)
                 + "&contentId=" + contentId);
         log.info("URI : " + uri);

@@ -5,12 +5,14 @@ import kopo.poly.service.ITourismService;
 import kopo.poly.vo.*;
 import kopo.poly.enums.LanguageType;
 import kopo.poly.vo.introductions.*;
+import kopo.poly.vo.request.TourismRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static kopo.poly.constant.ApiConstants.LANGUAGE_TYPE_HEADER;
@@ -26,22 +28,42 @@ public class TourismApiController {
 
     /**
      * 숙박 정보 조회 API 호출
-     * @param languageType 호출 언어
      * @param areaCode 지역 코드
      * @param sigunguCode 시군구 코드
-     * @param pageNo 페이지 번호
+     * @param request 요청 Param
      * @return
      * @throws Exception
      */
-    @GetMapping("/lodgings/{areaCode}/{sigunguCode}/{pageNo}")
+    @GetMapping("/lodgings/{areaCode}/{sigunguCode}")
     public ResponseEntity<List<ApiLodgingDto>> getLodgingInfo(
-            @RequestHeader(LANGUAGE_TYPE_HEADER) final LanguageType languageType,
             @PathVariable final String areaCode, @PathVariable final String sigunguCode,
-            @PathVariable final String pageNo) throws Exception {
+            @Valid TourismRequest request) throws Exception {
 
 
+        return ResponseEntity.ok().body(tourismService.getLodgingList(
+                request.getLanguageType(), request.getPageNo(), areaCode, sigunguCode));
 
-        return ResponseEntity.ok().body(tourismService.getLodgingList(languageType, pageNo, areaCode, sigunguCode));
+    }
 
+    /**
+     * 지역을 기반으로 관광 정보 조회 API 호출
+     *
+     * @param areaCode    지역 코드
+     * @param sigunguCode 시군구 코드
+     * @param request     추가 정보 (분류 or 정렬) cat1 = 대분류, cat2 = 중분류, cat3 = 소분류 -> cat1 없이 cat2 요청 불가
+     * @return
+     * @throws Exception
+     */
+    @GetMapping("/areas/{areaCode}/{sigunguCode}")
+    public ResponseEntity<List<ApiAreaBasedDto>> getTourismInfoByArea(
+            @PathVariable String areaCode, @PathVariable String sigunguCode,
+            @Valid TourismRequest request) throws Exception {
+        request.setAreaCode(areaCode);
+        request.setSigunguCode(sigunguCode);
+
+        log.info("pageNo : " + request.getPageNo());
+
+
+        return ResponseEntity.ok().body(tourismService.getTourismInfoByArea(request));
     }
 }
