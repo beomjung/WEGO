@@ -5,6 +5,7 @@ import kopo.poly.service.IUserService;
 import kopo.poly.util.EncryptUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,25 +32,17 @@ public class UserController {
     /**
      * 사용자 회원가입
      *
-     * @param request (UserDto)
+     * @param userDto (UserDto)
      * @param model
      * @return
      * @throws Exception
      */
     @PostMapping("/users")
-    public String saveUserInfo(final HttpServletRequest request, Model model) throws Exception {
+    public String saveUserInfo(UserDto userDto, Model model) throws Exception {
         log.debug(this.getClass().getName() + "사용자 회원가입 시작");
         // TODO: 2022/08/24 사용자 정보 유효성 검사 in 컨트롤러 or @Validated or JSP 에서 처리하기
 
-        final UserDto result = userService.saveUserInfo(UserDto.builder()
-                .userId(String.valueOf(request.getParameter("userId")))
-                .userPassword(String.valueOf(request.getParameter("userPassword")))
-                .userEmail(String.valueOf(request.getParameter("userEmail")))
-                .userNickname(String.valueOf(request.getParameter("userNickname")))
-                .userName(String.valueOf(request.getParameter("userName")))
-                .userGender(String.valueOf(request.getParameter("userGender")))
-                .userAge(Integer.parseInt(request.getParameter("userAge")))
-                .userAddress(String.valueOf(request.getParameter("userAddress"))).build());
+        final UserDto result = userService.saveUserInfo(userDto);
 
         model.addAttribute("msg", result.getUserId() + "님 회원가입을 축하드립니다");
         model.addAttribute("url", INDEX_URL);
