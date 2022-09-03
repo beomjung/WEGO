@@ -35,7 +35,7 @@ public class TourismService implements ITourismService {
      * @param pageNo page 번호 -> 기본적으로 pageNo : 1
      * @param areaCode 지역 번호
      * @param sigunguCode 시군구 번호
-     * @return 숙박정보 List
+     * @return 숙박정보 List (defaultCount : 10)
      * @throws Exception 일치하는 숙박 정보가 없음
      */
     @Override
@@ -67,8 +67,8 @@ public class TourismService implements ITourismService {
 
     /**
      * 지역 정보를 기반으로 관광 정보를 조회
-     * @param request
-     * @return 관광 정보 List
+     * @param request languageType, areaCode, sigunguCode (필수) options : { cat1, cat2, cat3, pageNo }
+     * @return 관광 정보 List (defaultCount : 10)
      * @throws Exception request 에 대한 관광 정보 없음 || 종료된 서비스
      */
 
@@ -97,7 +97,7 @@ public class TourismService implements ITourismService {
 
     /**
      * 키워드를 사용하여 숙박 정보 조회
-     * @param request (필수 request) : keyword, languageType
+     * @param request (필수 request) : keyword, languageType (options) : {cat1, cat2, cat3, areaCode, sigunguCode}
      * @return
      * @throws Exception
      */

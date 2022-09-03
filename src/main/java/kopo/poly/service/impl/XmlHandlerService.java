@@ -36,11 +36,16 @@ public class XmlHandlerService {
     private final Environment env;
 
     /**
-     * XML 파일에서 정보를 가져오는데 사용
+     * 서비스 파라미터를 받아 Return URL
+     * @param param Parameter 정보 (각 서비스에 맞는 파라미터) 필수 --> LanguageType && ServiceType
+     * + 한글 Param 이 예상될 경우 인코딩 필수 UriEncoder.encode({value})
+     * + 값이 없을 있을 경우 Param 추가 or ""
+     * @return Service URI
+     * @throws Exception 필수 Param 이 없거나, 포함할 수 없는 Param 이 포함될 경우 API 호출 시 Exception (500) 발생
      */
 
     // ServiceKey & Default Value  Setting
-    public URI getUri(TourismRequest param) throws URISyntaxException {
+    public URI getUri(TourismRequest param) throws Exception {
         final URI uri  = new URI("https://api.visitkorea.or.kr/openapi/service/rest/"
                 // 필수 Param
                 + param.getLanguageType().getLanguageType() + "/" // 요청할 언어 Type 설정

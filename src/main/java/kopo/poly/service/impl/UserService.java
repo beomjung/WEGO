@@ -31,9 +31,10 @@ public class UserService implements IUserService {
     /**
      * 사용자 회원가입
      *
-     * @param request
-     * @return
-     * @throws Exception
+     * @param request 사용자 회원가입 정보
+     * @return 사용자 회원가입 정보
+     * @throws UserException 중복된 아이디가 있을 경우
+     * @throws UserException 중복된 닉네임이 있을 경우
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -81,6 +82,13 @@ public class UserService implements IUserService {
                 .roomKey(userDto.getRoomKey()).build();
     }
 
+    /**
+     * 사용자 로그인
+     * @param request userId, userPassword
+     * @return 사용자 정보
+     * @throws UserException Parameter 아이디와 일치하는 사용자가 없을 경우
+     * @throws UserException Parameter 아이디와 일치하는 사용자는 있지만 비밀번호가 일치하지 않는 경우
+     */
     @Override
     public UserDto userLogin(final UserDto request) throws Exception {
         log.debug("userLogin");
@@ -101,13 +109,16 @@ public class UserService implements IUserService {
         return UserMapper.INSTANCE.userEntityToUserDto(user);
     }
 
+    /**
+     * 사용자 정보 변경
+     * @param request options : {변경할 사용자 정보} && userId
+     * @return 변경된 사용자 정보
+     * @throws UserException 사용자 아이디로 일치하는 회원 정보를 찾을 수 없음
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public UserDto updateUserInfo(UserDto request) throws Exception {
         log.debug("사용자 정보 Update");
-
-        // TODO: 2022/08/24 사용자 정보 변경 시 비밀번호 일치 여부 확인
-
         UserEntity user = userRepository.findByUserId(String.valueOf(request.getUserId()))
                 .orElseThrow(() -> new UserException(UserExceptionResult.USER_NOT_FOUND, INDEX_URL));
 
@@ -116,7 +127,7 @@ public class UserService implements IUserService {
                         .userSeq(user.getUserSeq())
                         .userId(user.getUserId())
                         .userEmail(user.getUserEmail())
-//                        .userName(user.getUserName())
+//                        .userName(user.getUserName()) (이름 변경 허용 시 주석 off )
                         // 변경되는 정보
                         .userGender(request.getUserGender())
                         .userAge(request.getUserAge())
