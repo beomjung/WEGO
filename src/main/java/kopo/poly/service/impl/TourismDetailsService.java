@@ -28,7 +28,7 @@ public class TourismDetailsService implements ITourismDetailsService {
 
     // 관광지 정보 조회
     @Override
-    @Cacheable(cacheNames = "MultilingualTouristDestination")
+    @Cacheable(cacheNames = "TouristDestination", key = "#languageType.languageType + #contentId")
     public TouristDestinationResult getTouristDestinationDetails(LanguageType languageType, String contentId) throws Exception {
         log.info("getTouristDestinationList : " + languageType.getLanguageType());
 
@@ -51,6 +51,7 @@ public class TourismDetailsService implements ITourismDetailsService {
 
     // 축제 정보 조회
     @Override
+    @Cacheable(cacheNames = "FestivalInfo", key = "#languageType.languageType + #contentId")
     public FestivalInfoResult getFestivalDetails(LanguageType languageType, String contentId) throws Exception {
         log.info("getFestivalInfoList : " + languageType.getLanguageType());
 
@@ -73,6 +74,7 @@ public class TourismDetailsService implements ITourismDetailsService {
 
     // 문화시설 정보 조회
     @Override
+    @Cacheable(cacheNames = "CulturalFacilities", key = "#languageType.languageType + #contentId")
     public CulturalFacilitiesResult getCulturalFacilitiesDetails(LanguageType languageType, String contentId) throws Exception {
         log.info("getLeportsList : " + languageType.getLanguageType());
 
@@ -95,6 +97,7 @@ public class TourismDetailsService implements ITourismDetailsService {
 
     // 레포츠 정보 조회
     @Override
+    @Cacheable(cacheNames = "Leports", key = "#languageType.languageType + #contentId")
     public LeportsResult getLeportsDetails(LanguageType languageType, String contentId) throws Exception {
         log.info("getLeportsList : " + languageType.getLanguageType());
 
@@ -117,6 +120,7 @@ public class TourismDetailsService implements ITourismDetailsService {
 
     // 숙박 정보 조회
     @Override
+    @Cacheable(cacheNames = "Lodging", key = "#languageType.languageType + #contentId")
     public LodgingResult getLodgingDetails(LanguageType languageType, String contentId) throws Exception {
         log.info("getLodgingList : " + languageType.getLanguageType());
 
@@ -139,6 +143,7 @@ public class TourismDetailsService implements ITourismDetailsService {
 
     // 음식점 정보 조회
     @Override
+    @Cacheable(cacheNames = "Restaurants", key = "#languageType.languageType + #contentId")
     public RestaurantsResult getRestaurantDetails(LanguageType languageType, String contentId) throws Exception {
         log.info("getRestaurantsList : " + languageType.getLanguageType());
 
@@ -161,6 +166,7 @@ public class TourismDetailsService implements ITourismDetailsService {
 
     // 쇼핑 정보 조회
     @Override
+    @Cacheable(cacheNames = "Shopping", key = "#languageType.languageType + #contentId")
     public ShoppingResult getShoppingDetails(LanguageType languageType, String contentId) throws Exception {
         log.info("getShoppingList : " + languageType.getLanguageType());
 
@@ -185,6 +191,7 @@ public class TourismDetailsService implements ITourismDetailsService {
 
     // 여행 코스 정보 조회
     @Override
+    @Cacheable(cacheNames = "TravelCourse", key = "#languageType.languageType + #contentId")
     public TravelCourseResult getTravelCourseDetails(LanguageType languageType, String contentId) throws Exception {
         log.info("getTravelCourseList : " + languageType.getLanguageType());
 
@@ -211,6 +218,7 @@ public class TourismDetailsService implements ITourismDetailsService {
 
     // 교통 정보 조회
     @Override
+    @Cacheable(cacheNames = "Transportation", key = "#languageType.languageType + #contentId")
     public TransportationResult getTransportationDetails(
             final LanguageType languageType, final String contentId) throws Exception {
         log.info("getTransportationList : " + languageType.getLanguageType());

@@ -1,10 +1,7 @@
 package kopo.poly.controller.rest;
 
-import kopo.poly.service.ITourismDetailsService;
 import kopo.poly.service.ITourismService;
 import kopo.poly.vo.*;
-import kopo.poly.enums.LanguageType;
-import kopo.poly.vo.introductions.*;
 import kopo.poly.vo.request.TourismRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-import static kopo.poly.constant.ApiConstants.LANGUAGE_TYPE_HEADER;
 
 /**
  * 한국관광공사 관광정보 서비스 Open Api (행사 정보 조회, 숙박 정보 조회, 지역기반 관광 정보 조회, 반복 정보 조회) 등 List 로 넘어오는 Values
