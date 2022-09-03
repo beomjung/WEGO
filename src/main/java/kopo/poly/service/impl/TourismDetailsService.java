@@ -7,6 +7,7 @@ import kopo.poly.exception.ApiException;
 import kopo.poly.exception.result.ApiExceptionResult;
 import kopo.poly.service.ITourismDetailsService;
 import kopo.poly.vo.introductions.*;
+import kopo.poly.vo.request.TourismRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
@@ -16,8 +17,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -32,12 +31,11 @@ public class TourismDetailsService implements ITourismDetailsService {
     public TouristDestinationResult getTouristDestinationDetails(LanguageType languageType, String contentId) throws Exception {
         log.info("getTouristDestinationList : " + languageType.getLanguageType());
 
-        final URI uri = URI.create(xmlHandlerService.getUri(languageType, ApiServiceType.SEARCH_DETAIL)
-                + "&contentTypeId=" + getContentTypeId(languageType, ContentType.TOURIST_DESTINATION)
-                + "&contentId=" + contentId);
-
-        log.info("URI : " + uri);
-
+        final URI uri = xmlHandlerService.getUri(TourismRequest.builder()
+                .languageType(languageType)
+                .contentId(contentId)
+                .serviceType(ApiServiceType.SEARCH_DETAIL)
+                .contentType(ContentType.TOURIST_DESTINATION).build());
         final NodeList items = xmlHandlerService.getNoteListFromURI(uri);
 
         if (items.getLength() == 0 || items.item(0).getNodeType() != Node.ELEMENT_NODE) {
@@ -55,11 +53,11 @@ public class TourismDetailsService implements ITourismDetailsService {
     public FestivalInfoResult getFestivalDetails(LanguageType languageType, String contentId) throws Exception {
         log.info("getFestivalInfoList : " + languageType.getLanguageType());
 
-        final URI uri = URI.create(xmlHandlerService.getUri(languageType, ApiServiceType.SEARCH_DETAIL)
-                + "&contentTypeId=" + getContentTypeId(languageType, ContentType.FESTIVAL)
-                + "&contentId=" + contentId);
-
-        log.info("URI : " + uri);
+        final URI uri = xmlHandlerService.getUri(TourismRequest.builder()
+                .languageType(languageType)
+                .contentId(contentId)
+                .serviceType(ApiServiceType.SEARCH_DETAIL)
+                .contentType(ContentType.FESTIVAL).build());
 
 
         final NodeList items = xmlHandlerService.getNoteListFromURI(uri);
@@ -78,9 +76,11 @@ public class TourismDetailsService implements ITourismDetailsService {
     public CulturalFacilitiesResult getCulturalFacilitiesDetails(LanguageType languageType, String contentId) throws Exception {
         log.info("getLeportsList : " + languageType.getLanguageType());
 
-        final URI uri = URI.create(xmlHandlerService.getUri(languageType, ApiServiceType.SEARCH_DETAIL)
-                + "&contentTypeId=" + getContentTypeId(languageType, ContentType.CULTURAL_FACILITIES)
-                + "&contentId=" + contentId);
+        final URI uri = xmlHandlerService.getUri(TourismRequest.builder()
+                .languageType(languageType)
+                .contentId(contentId)
+                .serviceType(ApiServiceType.SEARCH_DETAIL)
+                .contentType(ContentType.CULTURAL_FACILITIES).build());
 
         log.info("URI : " + uri);
 
@@ -101,11 +101,12 @@ public class TourismDetailsService implements ITourismDetailsService {
     public LeportsResult getLeportsDetails(LanguageType languageType, String contentId) throws Exception {
         log.info("getLeportsList : " + languageType.getLanguageType());
 
-        final URI uri = URI.create(xmlHandlerService.getUri(languageType, ApiServiceType.SEARCH_DETAIL)
-                + "&contentTypeId=" + getContentTypeId(languageType, ContentType.LEPORTS)
-                + "&contentId=" + contentId);
+        final URI uri = xmlHandlerService.getUri(TourismRequest.builder()
+                .languageType(languageType)
+                .contentId(contentId)
+                .serviceType(ApiServiceType.SEARCH_DETAIL)
+                .contentType(ContentType.LEPORTS).build());
 
-        log.info("URI : " + uri);
 
         final NodeList items = xmlHandlerService.getNoteListFromURI(uri);
 
@@ -124,11 +125,12 @@ public class TourismDetailsService implements ITourismDetailsService {
     public LodgingResult getLodgingDetails(LanguageType languageType, String contentId) throws Exception {
         log.info("getLodgingList : " + languageType.getLanguageType());
 
-        final URI uri = URI.create(xmlHandlerService.getUri(languageType, ApiServiceType.SEARCH_DETAIL)
-                + "&contentTypeId=" + getContentTypeId(languageType, ContentType.LODGING)
-                + "&contentId=" + contentId);
+        final URI uri = xmlHandlerService.getUri(TourismRequest.builder()
+                .languageType(languageType)
+                .contentId(contentId)
+                .serviceType(ApiServiceType.SEARCH_DETAIL)
+                .contentType(ContentType.LODGING).build());
 
-        log.info("URI : " + uri);
 
         final NodeList items = xmlHandlerService.getNoteListFromURI(uri);
 
@@ -147,11 +149,12 @@ public class TourismDetailsService implements ITourismDetailsService {
     public RestaurantsResult getRestaurantDetails(LanguageType languageType, String contentId) throws Exception {
         log.info("getRestaurantsList : " + languageType.getLanguageType());
 
-        final URI uri = URI.create(xmlHandlerService.getUri(languageType, ApiServiceType.SEARCH_DETAIL)
-                + "&contentTypeId=" + getContentTypeId(languageType, ContentType.RESTAURANTS)
-                + "&contentId=" + contentId);
+        final URI uri = xmlHandlerService.getUri(TourismRequest.builder()
+                .languageType(languageType)
+                .contentId(contentId)
+                .serviceType(ApiServiceType.SEARCH_DETAIL)
+                .contentType(ContentType.RESTAURANTS).build());
 
-        log.info("URI : " + uri);
 
         final NodeList items = xmlHandlerService.getNoteListFromURI(uri);
 
@@ -170,11 +173,12 @@ public class TourismDetailsService implements ITourismDetailsService {
     public ShoppingResult getShoppingDetails(LanguageType languageType, String contentId) throws Exception {
         log.info("getShoppingList : " + languageType.getLanguageType());
 
-        final URI uri = URI.create(xmlHandlerService.getUri(languageType, ApiServiceType.SEARCH_DETAIL)
-                + "&contentTypeId=" + getContentTypeId(languageType, ContentType.SHOPPING)
-                + "&contentId=" + contentId);
+        final URI uri = xmlHandlerService.getUri(TourismRequest.builder()
+                .languageType(languageType)
+                .contentId(contentId)
+                .serviceType(ApiServiceType.SEARCH_DETAIL)
+                .contentType(ContentType.SHOPPING).build());
 
-        log.info("URI : " + uri);
 
         final NodeList items = xmlHandlerService.getNoteListFromURI(uri);
 
@@ -198,11 +202,11 @@ public class TourismDetailsService implements ITourismDetailsService {
         if (languageType != LanguageType.KOR) { // 국문 서비스만 제공
             throw new ApiException(ApiExceptionResult.CANNOT_USE_THIS_SERVICE);
         }
-        final URI uri = URI.create(xmlHandlerService.getUri(languageType, ApiServiceType.SEARCH_DETAIL)
-                + "&contentTypeId=" + getContentTypeId(languageType, ContentType.TRAVEL_COURSE)
-                + "&contentId=" + contentId);
-
-        log.info("uri : " + uri);
+        final URI uri = xmlHandlerService.getUri(TourismRequest.builder()
+                .languageType(languageType)
+                .contentId(contentId)
+                .serviceType(ApiServiceType.SEARCH_DETAIL)
+                .contentType(ContentType.TRAVEL_COURSE).build());
 
 
 
@@ -227,10 +231,11 @@ public class TourismDetailsService implements ITourismDetailsService {
             throw new ApiException(ApiExceptionResult.CANNOT_USE_THIS_SERVICE);
         }
 
-        final URI uri = URI.create(xmlHandlerService.getUri(languageType, ApiServiceType.SEARCH_DETAIL)
-                + "&contentTypeId=" + getContentTypeId(languageType, ContentType.TRANSPORTATION)
-                + "&contentId=" + contentId);
-        log.info("URI : " + uri);
+        final URI uri = xmlHandlerService.getUri(TourismRequest.builder()
+                .languageType(languageType)
+                .contentId(contentId)
+                .serviceType(ApiServiceType.SEARCH_DETAIL)
+                .contentType(ContentType.TRANSPORTATION).build());
 
         final NodeList items = xmlHandlerService.getNoteListFromURI(uri);
 
@@ -241,60 +246,4 @@ public class TourismDetailsService implements ITourismDetailsService {
         Element element = (Element) items.item(0);
         return xmlHandlerService.getTransportationResultFromElement(element);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * KOR 일 경우 KORContentTypeMap else -> multilingualContentTypeMap 에서 ID 값을 가져옴
-     */
-    private String getContentTypeId(final LanguageType languageType, final ContentType contentTypeName) throws Exception {
-        if (languageType == LanguageType.KOR) {
-            return korContentTypeId.get(contentTypeName);
-        } else {
-            return multilingualContentTypeId.get(contentTypeName);
-        }
-    }
-
-
-    /**
-     * ContentTypeId Map
-     */
-    private final Map<ContentType, String> multilingualContentTypeId = new HashMap<ContentType, String>() {
-        {
-            put(ContentType.TOURIST_DESTINATION, ContentType.TOURIST_DESTINATION.getMultilingualContentTypeId()); // 관광지
-            put(ContentType.CULTURAL_FACILITIES, ContentType.CULTURAL_FACILITIES.getMultilingualContentTypeId()); // 문화 시설
-            put(ContentType.FESTIVAL, ContentType.FESTIVAL.getMultilingualContentTypeId()); // 축제
-            put(ContentType.LEPORTS, ContentType.LEPORTS.getMultilingualContentTypeId()); // 레포츠
-            put(ContentType.LODGING, ContentType.LODGING.getMultilingualContentTypeId()); // 숙박
-            put(ContentType.SHOPPING, ContentType.SHOPPING.getMultilingualContentTypeId()); // 쇼핑
-            put(ContentType.RESTAURANTS, ContentType.RESTAURANTS.getMultilingualContentTypeId()); // 음식점
-            put(ContentType.TRANSPORTATION, ContentType.TRANSPORTATION.getMultilingualContentTypeId()); // only Multilingual 교통
-        }
-    };
-
-    private final Map<ContentType, String> korContentTypeId = new HashMap<ContentType, String>() {
-        {
-            put(ContentType.TOURIST_DESTINATION, ContentType.TOURIST_DESTINATION.getKorContentTypeId()); // 관광지
-            put(ContentType.CULTURAL_FACILITIES, ContentType.CULTURAL_FACILITIES.getKorContentTypeId()); // 문화 시설
-            put(ContentType.FESTIVAL, ContentType.FESTIVAL.getKorContentTypeId()); // 축제
-            put(ContentType.LEPORTS, ContentType.LEPORTS.getKorContentTypeId()); // 레포츠
-            put(ContentType.LODGING, ContentType.LODGING.getKorContentTypeId()); // 숙박
-            put(ContentType.SHOPPING, ContentType.SHOPPING.getKorContentTypeId()); // 쇼핑
-            put(ContentType.RESTAURANTS, ContentType.RESTAURANTS.getKorContentTypeId()); // 음식점
-            put(ContentType.TRAVEL_COURSE, ContentType.TRAVEL_COURSE.getKorContentTypeId()); // only KOR 여행 코스
-        }
-    };
 }

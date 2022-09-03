@@ -6,6 +6,7 @@ import kopo.poly.vo.request.TourismRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -57,9 +58,12 @@ public class TourismApiController {
         request.setAreaCode(areaCode);
         request.setSigunguCode(sigunguCode);
 
-        log.info("pageNo : " + request.getPageNo());
-
-
         return ResponseEntity.ok().body(tourismService.getTourismInfoByArea(request));
+    }
+
+
+    @GetMapping("/keywords")
+    public ResponseEntity<List<ApiKeywordDto>> getTourismInfoByKeyword(@Valid TourismRequest request, Model model) throws Exception {
+        return ResponseEntity.ok().body(tourismService.getTourismInfoByKeyword(request));
     }
 }

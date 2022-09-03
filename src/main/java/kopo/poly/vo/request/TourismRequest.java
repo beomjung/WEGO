@@ -1,5 +1,6 @@
 package kopo.poly.vo.request;
 
+import kopo.poly.enums.ApiServiceType;
 import kopo.poly.enums.ContentType;
 import kopo.poly.enums.LanguageType;
 import lombok.AllArgsConstructor;
@@ -22,9 +23,13 @@ public class TourismRequest {
     private String sigunguCode; // 시군구 번호
     private String arrange; // 정렬 기준 (?)
     private ContentType contentType; // ContentId (숙박, 축제)
-    // --> 대분류 없이 중분류 요청 불가, 중분류 없이 소분류 요청 불가
     private String cat1; // 대분류
     private String cat2; // 중분류
     private String cat3; // 소분류
+    private String keyword; // 키워드
+    private String contentId; // 관광 정보 고유 번호
+    private ApiServiceType serviceType; // 서비스 요청 EndPoint
+    private ContentType contentTypeId; // 관광 정보 종류 번호
+
 
 }

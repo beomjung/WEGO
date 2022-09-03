@@ -2,9 +2,11 @@ package kopo.poly.service.impl;
 
 import kopo.poly.enums.ApiServiceType;
 import kopo.poly.vo.ApiAreaBasedDto;
+import kopo.poly.vo.ApiKeywordDto;
 import kopo.poly.vo.ApiLodgingDto;
 import kopo.poly.vo.introductions.*;
 import kopo.poly.enums.LanguageType;
+import kopo.poly.vo.request.TourismRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
@@ -13,14 +15,17 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.yaml.snakeyaml.util.UriEncoder;
 
 import javax.xml.parsers.DocumentBuilder;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 /**
- * XML 파일 처리 관련 Service
+ * XML 파일 처리 관련 Service 및 URL Param 설정
  */
 @Service
 @Slf4j
@@ -35,12 +40,40 @@ public class XmlHandlerService {
      */
 
     // ServiceKey & Default Value  Setting
-    public URI getUri(LanguageType languageType, ApiServiceType serviceName) throws URISyntaxException {
-        return new URI("https://api.visitkorea.or.kr/openapi/service/rest/" + languageType.getLanguageType() + "/"
-                + serviceName.getServiceEndPoint() + "?"
+    public URI getUri(TourismRequest param) throws URISyntaxException {
+        final URI uri  = new URI("https://api.visitkorea.or.kr/openapi/service/rest/"
+                // 필수 Param
+                + param.getLanguageType().getLanguageType() + "/" // 요청할 언어 Type 설정
+                + param.getServiceType().getServiceEndPoint() + "?" // 서비스 EndPoint 설정
                 + "MobileOS=ETC" // 필수
                 + "&MobileApp=AppTest" // 필수
-                + "&serviceKey=" + env.getProperty("tourism.key"));
+                + "&serviceKey=" + env.getProperty("tourism.key") // 필수
+
+                // 요청값이 있으면 Param 설정 or Pass
+                + (param.getAreaCode() != null ? "&areaCode=" + param.getAreaCode() : "") // 지역 코드
+                + (param.getSigunguCode() != null ? "&sigunguCode=" + param.getSigunguCode() : "") // 시군구 코드
+                + (param.getPageNo() != null ? "&pageNo=" + param.getPageNo() : "") // Page 번호
+                + (param.getArrange() != null ? "&arrange=" + param.getArrange() : "") // 정렬 기준
+                + (param.getContentId() != null ? "&contentId=" + param.getContentId() : "") // 관광 정보 고유 번호
+                // 키워드를 사용하여 정보 조회 시 사용 (국문 서비스일 경우 인코딩 필수)
+                + (param.getKeyword() != null ? "&keyword=" + UriEncoder.encode(param.getKeyword()) : "")
+
+                // 관광 정보 상세 조회 시 사용 (ContentType 이 Param 으로 넘어올 경우 둘 중 하나만 설정 됨)
+                + (param.getContentType() != null && param.getLanguageType() == LanguageType.KOR ?
+                "&contentTypeId=" + param.getContentType().getKorContentTypeId() : "") // Service 언어가 KOR 일 경우
+
+                + (param.getContentType() != null && param.getLanguageType() != LanguageType.KOR ? // Service 언어가 KOR 이 아닐 경우
+                "&contentTypeId=" + param.getContentType().getMultilingualContentTypeId() : "")
+
+                // 분류 기준 cat1 없이 cat2 사용 불가능
+                + (param.getCat1() != null ? "&cat1=" + param.getCat1() : "") // 대분류
+                + (param.getCat1() != null && param.getCat2() != null ? "&cat2=" + param.getCat2() : "") // 중분류
+                + (param.getCat2() != null && param.getCat3() != null ? "&cat3=" + param.getCat3() : "") // 소분류
+        );
+
+        log.info("URI : " + uri);
+
+        return uri;
     }
 
 
@@ -307,6 +340,34 @@ public class XmlHandlerService {
     // AreaBasedDto 지역기반 정보 조회 실행 시 사용
     public ApiAreaBasedDto getAreaBasedDtoFromElement(Element element) throws Exception {
         return ApiAreaBasedDto.builder()
+                .addr1(getTagValue("addr1", element))
+                .addr2(getTagValue("addr2", element))
+                .areacode(getTagValue("areacode", element))
+                .cat1(getTagValue("cat1", element))
+                .cat2(getTagValue("cat1", element))
+                .cat3(getTagValue("cat1", element))
+                .areacode(getTagValue("areacode", element))
+                .contentid(getTagValue("contentid", element))
+                .contenttypeid(getTagValue("contenttypeid", element))
+                .createdtime(getTagValue("createdtime", element))
+                .firstimage(getTagValue("firstimage", element))
+                .firstimage2(getTagValue("firstimage2", element))
+                .mapx(getTagValue("mapx", element))
+                .mapy(getTagValue("mapy", element))
+                .mlevel(getTagValue("mlevel", element))
+                .modifiedtime(getTagValue("modifiedtime", element))
+                .readcount(getTagValue("readcount", element))
+                .tel(getTagValue("tel", element))
+                .title(getTagValue("title", element))
+                .sigungucode(getTagValue("sigungucode", element)).build();
+
+    }
+
+
+    // ApiKeywordDto 를 Element 에서 변환
+    public ApiKeywordDto getKeywordDtoFromElement(Element element) throws Exception {
+        return ApiKeywordDto.builder()
+                .booktour(getTagValue("booktour", element))
                 .addr1(getTagValue("addr1", element))
                 .addr2(getTagValue("addr2", element))
                 .areacode(getTagValue("areacode", element))
