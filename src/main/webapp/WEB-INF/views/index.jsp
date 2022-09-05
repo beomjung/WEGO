@@ -576,7 +576,8 @@
                                 <div class="home_adv_srch_opt text-center">
                                     <div class="wrapper">
                                         <div class="home_adv_srch_form">
-                                            <form class="bgc-white bgct-767 pl30 pt10 pl0-767">
+                                            <form class="bgc-white bgct-767 pl30 pt10 pl0-767" action="/search" method="get">
+                                                <input type="hidden" value="KOR" name="languageType">
                                                 <div class="form-row align-items-center">
                                                     <div class="col-auto home_form_input mb20-xsd">
                                                         <label class="sr-only">Username</label>
@@ -585,13 +586,13 @@
                                                                 <div class="input-group-text pl0 pb0-767">What</div>
                                                             </div>
                                                             <div class="select-wrap style1-dropdown">
-                                                                <select name="lang" class="form-control js-searchBox">
+                                                                <select class="form-control js-searchBox" name="contentType">
                                                                     <option value="">Ex: shopping, restaurant...</option>
                                                                     <option value="TopPicks">Top Picks</option>
                                                                     <option value="CityOfLondon">City of London</option>
-                                                                    <option value="OutdoorActivities">Outdoor Activities</option>
-                                                                    <option value="Restaurant">Restaurant</option>
-                                                                    <option value="Hotels">Hotels</option>
+                                                                    <option value="LEPORTS">Outdoor Activities</option>
+                                                                    <option value="RESTAURANTS">Restaurant</option>
+                                                                    <option value="LODGING">Hotels</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -603,13 +604,13 @@
                                                                 <div class="input-group-text pb0-767">Where</div>
                                                             </div>
                                                             <div class="select-wrap style2-dropdown">
-                                                                <select name="lang" class="form-control js-searchBox2">
+                                                                <select class="form-control js-searchBox2" name="contentType">
                                                                     <option value="">Your City</option>
-                                                                    <option value="NewYork">New York</option>
-                                                                    <option value="London">London</option>
-                                                                    <option value="Paris">Paris</option>
-                                                                    <option value="Istanbul">Istanbul</option>
-                                                                    <option value="LosAngeles">Los Angeles</option>
+                                                                    <option value="1">New York</option>
+                                                                    <option value="2">London</option>
+                                                                    <option value="3">Paris</option>
+                                                                    <option value="4">Istanbul</option>
+                                                                    <option value="5">Los Angeles</option>
                                                                 </select>
                                                             </div>
                                                         </div>
