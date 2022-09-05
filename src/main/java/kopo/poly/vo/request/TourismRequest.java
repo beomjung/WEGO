@@ -28,6 +28,7 @@ public class TourismRequest {
     private String cat3; // 소분류
     private String keyword; // 키워드
     private String contentId; // 관광 정보 고유 번호
+    // ServiceImpl 에서 설정됨
     private ApiServiceType serviceType; // 서비스 요청 EndPoint
 
 
