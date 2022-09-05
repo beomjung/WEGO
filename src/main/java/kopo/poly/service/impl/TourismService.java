@@ -1,8 +1,6 @@
 package kopo.poly.service.impl;
 
-import com.ctc.wstx.shaded.msv_core.util.Uri;
 import kopo.poly.enums.ApiServiceType;
-import kopo.poly.enums.LanguageType;
 import kopo.poly.exception.CustomException;
 import kopo.poly.service.ITourismService;
 import kopo.poly.vo.ApiAreaBasedDto;
@@ -11,7 +9,6 @@ import kopo.poly.vo.ApiLodgingDto;
 import kopo.poly.vo.request.TourismRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Element;
@@ -22,6 +19,10 @@ import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
 
+
+/**
+ * API 호출 후 결과 값이 List 로 넘어옴, LanguageType 필수 -> XmlHandlerService 에서 Exception 발생
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -31,23 +32,25 @@ public class TourismService implements ITourismService {
 
     /**
      * 지역 정보를 기반으로 숙박 정보 (only) 조회
-     * @param languageType 언어 정보 (수정)
-     * @param pageNo page 번호 -> 기본적으로 pageNo : 1
-     * @param areaCode 지역 번호
-     * @param sigunguCode 시군구 번호
+     *
+     * @param request 조회 시 사용되는 Param
      * @return 숙박정보 List (defaultCount : 10)
      * @throws Exception 일치하는 숙박 정보가 없음
      */
     @Override
-    @Cacheable(cacheNames = "MultilingualLodgingApi")
-    public List<ApiLodgingDto> getLodgingList(
-            final LanguageType languageType, final String pageNo, final String areaCode, final String sigunguCode) throws Exception {
-        log.debug("getLodgingList in " + languageType);
+    public List<ApiLodgingDto> getLodgingList(final TourismRequest request) throws Exception {
+        // final LanguageType languageType, final String pageNo, final String areaCode, final String sigunguCode
+        log.debug("getLodgingList in " + request.getLanguageType().getLanguageType());
         final URI uri = xmlHandlerService.getUri(TourismRequest.builder()
-                .areaCode(areaCode)
-                .languageType(languageType)
-                .pageNo(pageNo)
-                .sigunguCode(sigunguCode)
+                .languageType(request.getLanguageType())
+                .arrange(request.getArrange()) // 정렬 기준
+                .pageNo(request.getPageNo())  // 페이지 번호
+                .cat1(request.getCat1()) // 대분류
+                .cat2(request.getCat2()) // 중분류
+                .cat3(request.getCat3()) // 소분류
+                .contentType(request.getContentType()) // 관광타입
+                .areaCode(request.getAreaCode()) // 지역코드
+                .sigunguCode(request.getSigunguCode()) // 시군구코드
                 .serviceType(ApiServiceType.SEARCH_STAY).build());
 
         log.info("uri : " + uri);
@@ -67,6 +70,7 @@ public class TourismService implements ITourismService {
 
     /**
      * 지역 정보를 기반으로 관광 정보를 조회
+     *
      * @param request languageType, areaCode, sigunguCode (필수) options : { cat1, cat2, cat3, pageNo }
      * @return 관광 정보 List (defaultCount : 10)
      * @throws Exception request 에 대한 관광 정보 없음 || 종료된 서비스
@@ -78,7 +82,15 @@ public class TourismService implements ITourismService {
 
         request.setServiceType(ApiServiceType.SEARCH_ALL_BY_AREA);
 
-        final URI uri = xmlHandlerService.getUri(request);
+        // Controller 에서 넘어오지 않는 값 (null)의 경우 xmlHandlerService 에서 처리 (전송  X)
+        final URI uri = xmlHandlerService.getUri(TourismRequest.builder()
+                .arrange(request.getArrange()) // 정렬 기준
+                .cat1(request.getCat1()) // 대분류
+                .cat2(request.getCat2()) // 중분류
+                .cat3(request.getCat3()) // 소분류
+                .contentType(request.getContentType()) // 관광타입
+                .areaCode(request.getAreaCode()) // 지역코드
+                .sigunguCode(request.getSigunguCode()).build()); // 시군구코드
 
 
         final NodeList items = xmlHandlerService.getNoteListFromURI(uri);
@@ -97,6 +109,7 @@ public class TourismService implements ITourismService {
 
     /**
      * 키워드를 사용하여 숙박 정보 조회
+     *
      * @param request (필수 request) : keyword, languageType (options) : {cat1, cat2, cat3, areaCode, sigunguCode}
      * @return
      * @throws Exception
@@ -105,12 +118,20 @@ public class TourismService implements ITourismService {
     public List<ApiKeywordDto> getTourismInfoByKeyword(final TourismRequest request) throws Exception {
         log.debug("getTourismInfoByKeyword Start! -> " + request.getLanguageType());
 
-        if (request.getKeyword() == null) {
+        if (request.getKeyword() == null) { // keyword 없이 로직은 동작하지만 없다면 Exception
             throw new CustomException(HttpStatus.BAD_REQUEST, "KeyWord를 입력해 주세요.", "/");
         }
 
         request.setServiceType(ApiServiceType.SEARCH_BY_KEYWORD);
-        final URI uri = xmlHandlerService.getUri(request);
+        final URI uri = xmlHandlerService.getUri(TourismRequest.builder()
+                .arrange(request.getArrange())
+                .contentType(request.getContentType()) // 관광타입
+                .areaCode(request.getAreaCode()) // 지역코드
+                .sigunguCode(request.getSigunguCode()) // 시군구코드
+                .cat1(request.getCat1()) // 대분류
+                .cat2(request.getCat2()) // 중분류
+                .cat3(request.getCat3()) // 소분류
+                .keyword(request.getKeyword()).build()); // 키워드 (키워드를 사용하여 조회 시 만 전송)
 
 
         final NodeList items = xmlHandlerService.getNoteListFromURI(uri);

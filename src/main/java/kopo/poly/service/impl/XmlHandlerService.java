@@ -1,6 +1,8 @@
 package kopo.poly.service.impl;
 
 import kopo.poly.enums.ApiServiceType;
+import kopo.poly.exception.ApiException;
+import kopo.poly.exception.result.ApiExceptionResult;
 import kopo.poly.vo.ApiAreaBasedDto;
 import kopo.poly.vo.ApiKeywordDto;
 import kopo.poly.vo.ApiLodgingDto;
@@ -46,6 +48,11 @@ public class XmlHandlerService {
 
     // ServiceKey & Default Value  Setting
     public URI getUri(TourismRequest param) throws Exception {
+
+        if (param.getLanguageType() == null) { // 서비스 언어는 필수 값
+            throw new ApiException(ApiExceptionResult.NOT_FOUND_LANGUAGE_TYPE);
+        }
+
         final URI uri  = new URI("https://api.visitkorea.or.kr/openapi/service/rest/"
                 // 필수 Param
                 + param.getLanguageType().getLanguageType() + "/" // 요청할 언어 Type 설정
