@@ -11,7 +11,7 @@ public enum ApiExceptionResult {
     CANNOT_USE_THIS_SERVICE(HttpStatus.BAD_REQUEST, "해당 언어로는 사용할 수 없는 서비스 입니다"),
     RESULT_NOT_FOUND(HttpStatus.NOT_FOUND, "검색 결과가 없습니다"),
 
-    NOT_FOUND_LANGUAGE_TYPE(HttpStatus.BAD_REQUEST, "언어 정보를 입력해 주세요.")
+    BAD_REQUEST_LANGUAGE_TYPE_OR_SERVICE_TYPE(HttpStatus.BAD_REQUEST, "언어 정보 및 서비스 종류를 입력해주세요.")
     ;
 
     private final HttpStatus httpStatus;

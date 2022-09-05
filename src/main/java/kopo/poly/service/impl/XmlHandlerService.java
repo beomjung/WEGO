@@ -49,8 +49,8 @@ public class XmlHandlerService {
     // ServiceKey & Default Value  Setting
     public URI getUri(TourismRequest param) throws Exception {
 
-        if (param.getLanguageType() == null) { // 서비스 언어는 필수 값
-            throw new ApiException(ApiExceptionResult.NOT_FOUND_LANGUAGE_TYPE);
+        if (param.getLanguageType() == null || param.getServiceType() == null) { // 서비스 언어 및 서비스 종류 없이 API 호출 불가
+            throw new ApiException(ApiExceptionResult.BAD_REQUEST_LANGUAGE_TYPE_OR_SERVICE_TYPE);
         }
 
         final URI uri  = new URI("https://api.visitkorea.or.kr/openapi/service/rest/"

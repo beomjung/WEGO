@@ -31,7 +31,7 @@ public class TourismService implements ITourismService {
 
 
     /**
-     * 지역 정보를 기반으로 숙박 정보 (only) 조회
+     * 숙박 정보 (only) 조회
      *
      * @param request 조회 시 사용되는 Param
      * @return 숙박정보 List (defaultCount : 10)
@@ -42,6 +42,7 @@ public class TourismService implements ITourismService {
         // final LanguageType languageType, final String pageNo, final String areaCode, final String sigunguCode
         log.debug("getLodgingList in " + request.getLanguageType().getLanguageType());
         final URI uri = xmlHandlerService.getUri(TourismRequest.builder()
+                .serviceType(ApiServiceType.SEARCH_STAY) // 숙박 정보 조회
                 .languageType(request.getLanguageType())
                 .arrange(request.getArrange()) // 정렬 기준
                 .pageNo(request.getPageNo())  // 페이지 번호
@@ -80,10 +81,11 @@ public class TourismService implements ITourismService {
     public List<ApiAreaBasedDto> getTourismInfoByArea(TourismRequest request) throws Exception {
         log.debug("getLodgingList in " + request.getLanguageType());
 
-        request.setServiceType(ApiServiceType.SEARCH_ALL_BY_AREA);
 
         // Controller 에서 넘어오지 않는 값 (null)의 경우 xmlHandlerService 에서 처리 (전송  X)
         final URI uri = xmlHandlerService.getUri(TourismRequest.builder()
+                .languageType(request.getLanguageType()) // 언어 정보
+                .serviceType(ApiServiceType.SEARCH_ALL_BY_AREA) // 지역 기반으로 조회
                 .arrange(request.getArrange()) // 정렬 기준
                 .cat1(request.getCat1()) // 대분류
                 .cat2(request.getCat2()) // 중분류
@@ -119,11 +121,12 @@ public class TourismService implements ITourismService {
         log.debug("getTourismInfoByKeyword Start! -> " + request.getLanguageType());
 
         if (request.getKeyword() == null) { // keyword 없이 로직은 동작하지만 없다면 Exception
-            throw new CustomException(HttpStatus.BAD_REQUEST, "KeyWord를 입력해 주세요.", "/");
+            throw new CustomException(HttpStatus.BAD_REQUEST, "KeyWord 를 입력해 주세요.", "/");
         }
 
-        request.setServiceType(ApiServiceType.SEARCH_BY_KEYWORD);
         final URI uri = xmlHandlerService.getUri(TourismRequest.builder()
+                .languageType(request.getLanguageType()) // 언어 정보
+                .serviceType(ApiServiceType.SEARCH_BY_KEYWORD) // 키워드를 사용하여 조회
                 .arrange(request.getArrange())
                 .contentType(request.getContentType()) // 관광타입
                 .areaCode(request.getAreaCode()) // 지역코드
