@@ -25,9 +25,10 @@ public class TourismApiController {
 
     /**
      * 숙박 정보 조회 API 호출
-     * @param areaCode 지역 코드
+     *
+     * @param areaCode    지역 코드
      * @param sigunguCode 시군구 코드
-     * @param request 요청 Param
+     * @param request     요청 Param
      * @return
      * @throws Exception
      */
@@ -36,9 +37,12 @@ public class TourismApiController {
             @PathVariable final String areaCode, @PathVariable final String sigunguCode,
             @Valid TourismRequest request) throws Exception {
 
-
-        return ResponseEntity.ok().body(tourismService.getLodgingList(
-                request.getLanguageType(), request.getPageNo(), areaCode, sigunguCode));
+        // TODO: 2022-09-05 사용하는 Param 에 맞게 추가 or 삭제
+        return ResponseEntity.ok().body(tourismService.getLodgingList(TourismRequest.builder()
+                .languageType(request.getLanguageType())
+                .pageNo(request.getPageNo())
+                .areaCode(request.getAreaCode())
+                .sigunguCode(sigunguCode).build()));
 
     }
 

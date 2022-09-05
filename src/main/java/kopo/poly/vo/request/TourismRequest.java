@@ -29,7 +29,6 @@ public class TourismRequest {
     private String keyword; // 키워드
     private String contentId; // 관광 정보 고유 번호
     private ApiServiceType serviceType; // 서비스 요청 EndPoint
-    private ContentType contentTypeId; // 관광 정보 종류 번호
 
 
 }

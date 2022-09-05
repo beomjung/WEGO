@@ -12,7 +12,7 @@ public interface ITourismService {
 
 
     // 지역 별 숙박 정보 조회
-    List<ApiLodgingDto> getLodgingList(LanguageType languageType, String pageNo, String areaCode, String sigunguCode) throws Exception;
+    List<ApiLodgingDto> getLodgingList(TourismRequest request) throws Exception;
 
 
     // 지역기반 관광 정보 조회
