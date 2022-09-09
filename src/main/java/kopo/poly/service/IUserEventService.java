@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface IUserEventService {
 
-    UserEventDTO saveUserEvent(final UserEventDTO request) throws Exception;
+    Boolean saveUserEvent(final UserEventDTO request) throws Exception;
 
     List<UserEventDTO> getUserEvent(final UserDto request) throws Exception;
 
-    UserEventDTO changeUserEvent(final UserEventDTO request) throws Exception;
+    UserEventDTO updateUserEvent(final UserEventDTO request) throws Exception;
 
     Boolean deleteUserEvent(final UserEventDTO request) throws Exception;
 }

@@ -16,4 +16,6 @@ public interface UserEventRepository extends JpaRepository<UserEventEntity, Inte
     Optional<List<UserEventEntity>> findByUserId(final String userId);
 
     Optional<UserEventEntity> findByEventSeq(final Integer eventSeq);
+
+
 }

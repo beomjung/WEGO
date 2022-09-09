@@ -27,8 +27,15 @@ public class UserEventService implements IUserEventService {
     private final UserEventRepository userEventRepository;
 
     @Override
-    public UserEventDTO saveUserEvent(UserEventDTO request) throws Exception {
-        return null;
+    public Boolean saveUserEvent(UserEventDTO request) throws Exception {
+
+        UserEventEntity userEventEntity = UserEventMapper.INSTANCE.userEventDTOToUserEventEntity(request);
+        final UserEventEntity result = userEventRepository.save(userEventEntity);
+
+        if (result == null) {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -47,12 +54,31 @@ public class UserEventService implements IUserEventService {
     }
 
     @Override
-    public UserEventDTO changeUserEvent(UserEventDTO request) throws Exception {
-        return null;
+    public UserEventDTO updateUserEvent(UserEventDTO request) throws Exception {
+
+        UserEventEntity userEventEntity = userEventRepository.findByEventSeq(request.getEventSeq())
+                .orElse(new UserEventEntity());
+        if (userEventEntity == null) {
+            return null;
+        }
+        return UserEventMapper.INSTANCE.userEventEntityToUserEventDTO(
+                userEventRepository.save(userEventEntity.builder()
+                        .eventSeq(userEventEntity.getEventSeq())
+                        .eventName(request.getEventName())
+                        .eventStartDate(request.getEventStartDate())
+                        .eventEndDate(request.getEventEndDate()).build()));
     }
 
     @Override
     public Boolean deleteUserEvent(UserEventDTO request) throws Exception {
-        return null;
+
+        UserEventEntity userEventEntity = userEventRepository.findByEventSeq(request.getEventSeq())
+                .orElse(new UserEventEntity());
+        if (userEventEntity != null) {
+            userEventRepository.delete(userEventEntity);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
