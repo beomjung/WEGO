@@ -17,18 +17,18 @@ public class UserEventEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String eventSeq;
+    private String eventSeq; //이벤트 식별 번호(자동생성)
 
     @Column(length = 10)
-    private String eventStartDate;
+    private String eventStartDate; //이벤트 시작일
 
     @Column(length = 10)
-    private String eventEndDate;
+    private String eventEndDate; //이벤트 종료일
 
     @Column(length = 20)
-    private String eventName;
+    private String eventName; //이벤트 제목
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JsonIgnore
-    private UserEntity user;
+    private UserEntity user; //user Table과 1:N 매핑
 }
